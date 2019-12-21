@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -21,21 +22,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var button9: Button? = null
 
     private var resetButton: Button? = null
+    private var restartButton: Button? = null
 
     private var firstPlayer = ArrayList<Int>()
     private var secondPlayer = ArrayList<Int>()
 
     private var activePlayer = 1
+    private var checkAmount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         init()
 
     }
 
     private fun init() {
+
+
 
         button1 = findViewById(R.id.button1)
         button2 = findViewById(R.id.button2)
@@ -47,7 +51,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button8 = findViewById(R.id.button8)
         button9 = findViewById(R.id.button9)
 
-        resetButton = findViewById(R.id.bRestart)
+        resetButton = findViewById(R.id.bReset)
+        restartButton = findViewById(R.id.bRestart)
 
         button1?.setOnClickListener(this)
         button2?.setOnClickListener(this)
@@ -60,9 +65,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button9?.setOnClickListener(this)
 
         resetButton?.setOnClickListener {
-
-
+            clearAllButtons()
+            oScore.text = "0"
+            xScore.text = "0"
         }
+        restartButton?.setOnClickListener {
+            clearAllButtons()
+        }
+
 
     }
 
@@ -111,6 +121,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun check() {
 
         var winnerPlayer = 0
+        checkAmount+=1
 
         if (firstPlayer.contains(1) && firstPlayer.contains(2) && firstPlayer.contains(3)) {
             winnerPlayer = 1
@@ -169,12 +180,61 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         if (winnerPlayer != 0) {
+
+            clearAllButtons()
+            checkAmount = 0
             if (winnerPlayer == 1) {
                 Toast.makeText(this, "X Wins!", Toast.LENGTH_SHORT).show()
+                var xScoreInt = xScore.text.toString().toInt()
+                xScoreInt+=1
+                xScore.text = xScoreInt.toString()
+                activePlayer = 1
             } else {
                 Toast.makeText(this, "O Wins!", Toast.LENGTH_SHORT).show()
+                var oScoreInt = oScore.text.toString().toInt()
+                oScoreInt+=1
+                oScore.text = oScoreInt.toString()
+                activePlayer = 2
+            }}
+        if (checkAmount==9){
+            checkAmount=0
+            clearAllButtons()
+            Toast.makeText(this,"TIE!",Toast.LENGTH_SHORT).show()
             }
-        }
+
+
+    }
+    private fun clearAllButtons(){
+        firstPlayer.clear()
+        secondPlayer.clear()
+        button1?.setBackgroundResource(android.R.drawable.btn_default)
+        button2?.setBackgroundResource(android.R.drawable.btn_default)
+        button3?.setBackgroundResource(android.R.drawable.btn_default)
+        button4?.setBackgroundResource(android.R.drawable.btn_default)
+        button5?.setBackgroundResource(android.R.drawable.btn_default)
+        button6?.setBackgroundResource(android.R.drawable.btn_default)
+        button7?.setBackgroundResource(android.R.drawable.btn_default)
+        button8?.setBackgroundResource(android.R.drawable.btn_default)
+        button9?.setBackgroundResource(android.R.drawable.btn_default)
+        button1?.setText("")
+        button2?.setText("")
+        button3?.setText("")
+        button4?.setText("")
+        button5?.setText("")
+        button6?.setText("")
+        button7?.setText("")
+        button8?.setText("")
+        button9?.setText("")
+        button1?.isEnabled=true
+        button2?.isEnabled=true
+        button3?.isEnabled=true
+        button4?.isEnabled=true
+        button5?.isEnabled=true
+        button6?.isEnabled=true
+        button7?.isEnabled=true
+        button8?.isEnabled=true
+        button9?.isEnabled=true
+        checkAmount = 0
 
     }
 
